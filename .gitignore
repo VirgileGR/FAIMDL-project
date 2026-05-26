@@ -1,0 +1,26 @@
+.DS_Store
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+
+# Python / notebook caches
+__pycache__/
+.ipynb_checkpoints/
+
+# Large local data and model artifacts
+*.pt
+*.bin
+*.ckpt
+*.zip
+datasets/
+data/
+checkpoints/
+*.pth
+*.pth.tar

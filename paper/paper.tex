@@ -1,0 +1,197 @@
+\documentclass[10pt,conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+% Packages
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+
+\begin{document}
+
+\title{Open-World Anomaly Segmentation for Autonomous Driving}
+
+\author{\IEEEauthorblockN{German Ryjluk}
+\IEEEauthorblockA{\textit{Data Science and Engineering} \\
+\textit{Politecnico di Torino}\\
+Turin, Italy \\
+student.email@studenti.polito.it}
+\and
+\IEEEauthorblockN{Teammate Name}
+\IEEEauthorblockA{\textit{Data Science and Engineering} \\
+\textit{Politecnico di Torino}\\
+Turin, Italy \\
+teammate.email@studenti.polito.it}
+}
+
+\maketitle
+
+\begin{abstract}
+[PLACEHOLDER: Write a concise summary of 150-200 words. Describe the objective (cross-domain evaluation between COCO and Cityscapes, model fine-tuning, and anomaly segmentation benchmark across 5 datasets) and key findings (e.g., which model-method configuration achieved state-of-the-art performance).]
+\end{abstract}
+
+\begin{IEEEkeywords}
+Semantic Segmentation, Panoptic Segmentation, Anomaly Detection, Out-of-Distribution, Autonomous Driving
+\end{IEEEkeywords}
+
+% ---------------------------------------------------
+\section{Introduction}
+
+\subsection{Background}
+[PLACEHOLDER: Discuss the critical role of semantic, instance, and panoptic segmentation in modern autonomous driving systems.]
+
+\subsection{The Open-World Challenge}
+[PLACEHOLDER: Explain the limitations of current closed-world deep networks when encountering unknown, anomalous, or out-of-distribution (OoD) objects.]
+
+\subsection{Project Scope}
+[PLACEHOLDER: State the objectives of the paper, including task space analysis, domain adaptation via fine-tuning, and post-hoc baseline comparisons for anomaly detection.]
+
+% ---------------------------------------------------
+\section{Understanding Segmentation Tasks and Architectures}
+
+\subsection{Semantic vs. Instance vs. Panoptic Segmentation}
+[PLACEHOLDER: Provide a concise conceptual distinction highlighting class spaces and instance-level definitions. Keep it practical and related to the project.]
+
+\subsection{Architectural Evolution}
+[PLACEHOLDER: Briefly overview the shift from pixel-based networks (like ERFNet) to modern mask-based paradigms (MaskFormer, Mask2Former, and the exploitation of DINOv2 visual priors in the EoMT framework).]
+
+% ---------------------------------------------------
+\section{Cross-Domain Evaluation (Task 4 \& 5)}
+
+\subsection{Class Mapping Strategy}
+Evaluating a model trained on the COCO dataset for panoptic segmentation against a ground truth tailored for Cityscapes semantic segmentation presents a non-trivial class space mismatch. COCO encompasses 133 continuous categories, whereas Cityscapes defines 19 specific evaluation classes (trainIds) for urban driving scenarios, alongside an ``ignore'' class (ID 255) for ambiguous regions.
+
+To enable a fair and consistent quantitative comparison (mIoU), we implemented a deterministic mapping function $\mathcal{M}: \mathbb{Z}^{133} \rightarrow \mathbb{Z}^{19} \cup \{255\}$. This function projects the continuous COCO predictions onto the Cityscapes evaluation space. For instance, broad COCO categories such as ``building-other'' (ID 80) and ``house'' (ID 90) were collapsed into the Cityscapes ``building'' class (trainId 2). Conversely, COCO predictions that fall outside the Cityscapes driving domain (e.g., indoor objects or animals) were mapped directly to the ignore index (255), ensuring they do not negatively penalize the model's semantic performance in urban scenes. 
+
+The evaluation pipeline strictly applies this mapping prior to confusion matrix accumulation, guaranteeing that the mIoU is computed over an identical, standardized label space for both the Cityscapes-trained and COCO-trained EoMT checkpoints.
+
+\subsection{Qualitative Comparison}
+Figure \ref{fig:qualitative} compares the visual behaviour of the Cityscapes-trained semantic checkpoint and the COCO-trained panoptic checkpoint on Cityscapes validation images. The Cityscapes model produces dense predictions aligned with the 19 urban driving classes, whereas the COCO model outputs masks over a broader panoptic label space. As a result, the COCO predictions can still recognize transferable object categories such as persons, cars, buses, bicycles, and traffic lights, but they often fail to provide dense and consistent coverage for road-layout classes such as road, sidewalk, vegetation, terrain, and sky. This qualitative gap motivates the explicit label-space mapping and the quantitative mIoU evaluation reported below.
+
+\begin{figure}[h]
+    \centering
+    % Uncomment the line below and ensure step4_qualitative.png is in your Overleaf folder
+    % \includegraphics[width=\linewidth]{step4_qualitative.png}
+    \vspace{3cm} % Remove this vspace once the image is included
+    \caption{Qualitative comparison of EoMT predictions on the Cityscapes validation set. (Left to Right): Original Image, Semantic Ground Truth, Semantic Prediction (EoMT-CS), and Panoptic Prediction (EoMT-COCO).}
+    \label{fig:qualitative}
+\end{figure}
+
+\subsection{Quantitative Evaluation (mIoU)}
+The Cityscapes validation evaluation confirms the strong impact of the domain and label-space mismatch. The EoMT checkpoint trained directly on Cityscapes reaches a mean IoU of $79.5\%$, while the COCO checkpoint, after deterministic projection into the Cityscapes label space, reaches only $23.1\%$ mIoU. This corresponds to an absolute drop of $56.4$ percentage points.
+
+\begin{table}[h]
+\centering
+\caption{Cross-domain semantic segmentation performance on Cityscapes validation.}
+\label{tab:cross_domain_miou}
+\begin{tabular}{lc}
+\toprule
+\textbf{Model} & \textbf{mIoU (\%)} \\
+\midrule
+EoMT-Cityscapes & 79.5 \\
+EoMT-COCO $\rightarrow$ Cityscapes mapping & 23.1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The per-class results show that the COCO model retains partial transferability for object-centric categories that are shared or semantically close between the datasets, such as person, car, bus, motorcycle, bicycle, and traffic light. Conversely, it performs poorly on scene-layout and stuff classes that are either absent, weakly aligned, or too coarsely represented in COCO. This supports the need for Cityscapes-specific adaptation before using the COCO checkpoint as a reliable urban-driving segmentation backbone.
+
+\subsection{Fine-Tuning EoMT-COCO}
+[PLACEHOLDER: Document the fine-tuning process on Cityscapes. Mention techniques like Automatic Mixed Precision, prediction head tuning, or LoRA. Analyze the resulting mIoU changes compared to the original benchmarks.]
+
+% ---------------------------------------------------
+\section{Anomaly Segmentation: Methodology (Task 7 \& 8)}
+
+\subsection{Evaluation Benchmarks}
+[PLACEHOLDER: Briefly introduce the 5 out-of-distribution validation datasets: SMIYC RA-21, SMIYC RO-21, FS Lost\&Found, FS Static, and Road Anomaly.]
+
+\subsection{Post-Hoc Scoring Functions}
+To tackle the anomaly segmentation task, we evaluate the OoD detection capabilities of the models using distinct post-hoc scoring functions applied to the network logits. For a given pixel, let $\mathbf{z} = [z_1, z_2, \dots, z_C]$ be the output logits over $C$ classes, and $\mathbf{p} = \text{softmax}(\mathbf{z})$ be the corresponding probability distribution. 
+
+\begin{itemize}
+    \item \textbf{Maximum Softmax Probability (MSP):} The baseline confidence is defined as the maximum predicted probability. The anomaly score is computed as $S_{MSP} = 1 - \max_{c} (p_c)$. While computationally efficient, MSP often suffers from overconfidence on unseen domains due to the exponential nature of the softmax function.
+    
+    \item \textbf{MaxLogit:} To mitigate softmax saturation, this method relies directly on the pre-softmax activations. The anomaly score is given by $S_{ML} = -\max_{c} (z_c)$. By bypassing the softmax normalization, MaxLogit preserves relative confidence margins, often yielding superior separation between in-distribution and OoD samples.
+    
+    \item \textbf{Normalized Maximum Entropy:} We measure the predictive uncertainty using the Shannon entropy of the probability distribution. To ensure the anomaly score scales strictly within the $[0, 1]$ interval, the raw entropy is normalized by the theoretical maximum entropy for $C$ classes:
+    \begin{equation}
+        S_{Ent} = \frac{-\sum_{c=1}^{C} p_c \log(p_c + \epsilon)}{\log(C)}
+    \end{equation}
+    where $\epsilon = 1e^{-8}$ is a smoothing factor for numerical stability.
+    
+    \item \textbf{Rejected by All (RbA):} [PLACEHOLDER: Detail the specific formulation for RbA, noting that it applies specifically to mask-based architectures like EoMT.]
+\end{itemize}
+
+% ---------------------------------------------------
+\section{Anomaly Segmentation: Results and Discussion}
+
+\subsection{Pixel-Based Baselines (ERFNet)}
+[PLACEHOLDER: Present AuPRC and FPR95 metrics using ERFNet. Analyze why the pre-softmax activations of MaxLogit yield superior performance over standard MSP. Reference Table \ref{tab:anomaly_baselines}.]
+
+\subsection{Mask-Based Baselines (EoMT)}
+[PLACEHOLDER: Compare the three EoMT checkpoints (COCO, Cityscapes, and Fine-tuned) across all 4 metrics. Reference Table \ref{tab:anomaly_baselines}.]
+
+\subsection{Confidence Calibration via Temperature Scaling}
+[PLACEHOLDER: Evaluate Temperature Scaling as a post-hoc optimization tool. Discuss the empirical search to identify the optimal temperature parameter ($t$) and its impact on results.]
+
+\subsection{Comparative Analysis}
+[PLACEHOLDER: Synthesize findings detailing which model architecture and uncertainty estimation pairing delivers the most reliable deployment boundaries for real-world driving contexts.]
+
+% ------------------ WIDE TABLE ---------------------
+\begin{table*}[t]
+\centering
+\caption{Anomaly Segmentation Baselines Results. Performance is reported as AuPRC $\uparrow$ / FPR95 $\downarrow$. The mIoU column indicates semantic segmentation performance on the Cityscapes validation set.}
+\label{tab:anomaly_baselines}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l|c|c|cc|cc|cc|cc|cc}
+\toprule
+\multirow{2}{*}{\textbf{Model}} & \multirow{2}{*}{\textbf{mIoU}} & \multirow{2}{*}{\textbf{Method}} & \multicolumn{2}{c|}{\textbf{SMIYC RA-21}} & \multicolumn{2}{c|}{\textbf{SMIYC RO-21}} & \multicolumn{2}{c|}{\textbf{FS L\&F}} & \multicolumn{2}{c|}{\textbf{FS Static}} & \multicolumn{2}{c}{\textbf{Road Anomaly}} \\
+& & & AuPRC & FPR95 & AuPRC & FPR95 & AuPRC & FPR95 & AuPRC & FPR95 & AuPRC & FPR95 \\
+\midrule
+\multirow{3}{*}{ERFNet} 
+& \multirow{3}{*}{--} 
+& MSP & 0.240 & 0.723 & 0.007 & 0.897 & 0.013 & 0.799 & 0.035 & 0.633 & 0.108 & 0.885 \\
+& & MaxLogit & 0.319 & 0.724 & 0.012 & 0.803 & 0.026 & 0.722 & 0.042 & 0.659 & 0.133 & 0.825 \\
+& & Max Entropy & 0.261 & 0.726 & 0.009 & 0.896 & 0.019 & 0.796 & 0.044 & 0.632 & 0.111 & 0.886 \\
+\midrule
+\multirow{4}{*}{EoMT (COCO)} 
+& \multirow{4}{*}{23.1} 
+& MSP & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+& & MaxLogit & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+& & Max Entropy & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+& & RbA & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+\midrule
+\multirow{4}{*}{EoMT (CS)} 
+& \multirow{4}{*}{79.5} 
+& MSP & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+& & MaxLogit & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+& & Max Entropy & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+& & RbA & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+\midrule
+\multirow{4}{*}{EoMT (Fine-Tuned)} 
+& \multirow{4}{*}{[XX.X]} 
+& MSP & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+& & MaxLogit & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+& & Max Entropy & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+& & RbA & -- & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+% ---------------------------------------------------
+
+% ---------------------------------------------------
+\section{Conclusion}
+[PLACEHOLDER: Provide a final summary confirming whether mask-based transformers outperform conventional pixel-based nets, the impact of fine-tuning on downstream safety validation, and future directions for robust open-world perception.]
+
+% ---------------------------------------------------
+% References
+\bibliographystyle{IEEEtran}
+\bibliography{references} 
+% You will need a references.bib file with the citations requested in the project PDF.
+
+\end{document}
