@@ -49,16 +49,16 @@ We have engineered this repository to be "Plug & Play". All experimental noteboo
 
 ### 1. Download Artifacts
 
-To successfully reproduce the results, you need to download specific artifacts for each task. The required scripts and weights are available in the [Course Project GitHub Repository](https://github.com/AlessandroMarinai/MaskArchitectureAnomaly_CourseProject), while datasets are in the TA's Google Drive.
+To successfully reproduce the results, you need to download specific artifacts for each task. The required scripts are available in the [Course Project GitHub Repository](https://github.com/AlessandroMarinai/MaskArchitectureAnomaly_CourseProject), while **all datasets and model weights** are hosted in this [Official Google Drive Folder](https://drive.google.com/drive/folders/1q2vHUzora2nP52fP50zmoQAykWuwoGav).
 
 **For Task 4 & 5 (EoMT Evaluation & Fine-Tuning):**
-- **Pretrained Weights:** Download the EoMT model weights (`eomt_cityscapes.bin` and `eomt_coco.bin`). The Cityscapes checkpoint can be found in the Google Drive link specified in the `eomt/README.md` of the Course GitHub repository.
-- **Datasets:** Download the original Cityscapes dataset (leftImg8bit and gtFine) from the official website or the provided Drive.
+- **Pretrained Weights:** Download the EoMT model weights (`eomt_cityscapes.bin` and `eomt_coco.bin`) from the Official Google Drive folder.
+- **Datasets:** Download the original Cityscapes dataset (leftImg8bit and gtFine) from the Official Google Drive folder.
 
 **For Task 7 (ERFNet Anomaly Baselines):**
 - **Evaluation Scripts:** Download the entire `eval/` folder (containing `erfnet.py`, `transform.py`, etc.) from the Course GitHub repository.
-- **Pretrained Weights:** Download `erfnet_pretrained.pth` from the `trained_models/` folder in the Course GitHub repository.
-- **Datasets:** Download `Anomaly_Validation_Datasets.zip` from the Google Drive link provided in the assignment PDF.
+- **Pretrained Weights:** Download `erfnet_pretrained.pth` from the `trained_models/` folder in the Course GitHub repository (or from the Official Google Drive if present).
+- **Datasets:** Download `Anomaly_Validation_Datasets.zip` from the Official Google Drive folder.
 
 **For Task 8 (EoMT Anomaly Evaluation & Temperature Scaling):**
 - **Model Architecture:** Download the entire `eomt/` folder from the Course GitHub repository (it contains the `models/` Python package required to instantiate EoMT).
