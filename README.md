@@ -47,35 +47,34 @@ You **do not** need to download the gigabytes of datasets or model weights, nor 
 
 We have engineered this repository to be "Plug & Play". All experimental notebooks use **relative paths**, meaning you do not have to modify any code cells to run them, provided the data is placed in the correct directories.
 
-### 1. Download Artifacts
+### 1. Accessing Artifacts (No Download Required for Data)
 
-To successfully reproduce the results, you need to download specific artifacts for each task. The required scripts are available in the [Course Project GitHub Repository](https://github.com/AlessandroMarinai/MaskArchitectureAnomaly_CourseProject), while **all datasets and model weights** are hosted in this [Official Google Drive Folder](https://drive.google.com/drive/folders/1q2vHUzora2nP52fP50zmoQAykWuwoGav).
+To successfully reproduce the results, you need specific artifacts for each task. Because datasets and model weights are very heavy, **you do not need to download them locally**. Instead, you can use Google Drive shortcuts.
 
-**For Task 4 & 5 (EoMT Evaluation & Fine-Tuning):**
-- **Pretrained Weights:** Download the EoMT model weights (`eomt_cityscapes.bin` and `eomt_coco.bin`) from the Official Google Drive folder.
-- **Datasets:** Download the original Cityscapes dataset (leftImg8bit and gtFine) from the Official Google Drive folder.
+**A. Datasets and Weights (via Google Drive Shortcuts)**
+All datasets and model weights are hosted in this [Official Google Drive Folder](https://drive.google.com/drive/folders/1q2vHUzora2nP52fP50zmoQAykWuwoGav).
+1. Open the link.
+2. Instead of downloading, right-click the required datasets (`Anomaly_Validation_Datasets.zip`, `Cityscapes`) and weights (`eomt_cityscapes.bin`, `eomt_coco.bin`, `erfnet_pretrained.pth`) and select **Organize > Add shortcut** (Aggiungi scorciatoia).
+3. Place these shortcuts into a dedicated folder in your own Drive (e.g., `MyDrive/FAIMDL_Evaluation/data/` and `MyDrive/FAIMDL_Evaluation/checkpoints/`).
 
-**For Task 7 (ERFNet Anomaly Baselines):**
-- **Evaluation Scripts:** Download the entire `eval/` folder (containing `erfnet.py`, `transform.py`, etc.) from the Course GitHub repository.
-- **Pretrained Weights:** Download `erfnet_pretrained.pth` from the `trained_models/` folder in the Course GitHub repository (or from the Official Google Drive if present).
-- **Datasets:** Download `Anomaly_Validation_Datasets.zip` from the Official Google Drive folder.
-
-**For Task 8 (EoMT Anomaly Evaluation & Temperature Scaling):**
-- **Model Architecture:** Download the entire `eomt/` folder from the Course GitHub repository (it contains the `models/` Python package required to instantiate EoMT).
-- **Datasets & Weights:** This task reuses the same anomaly datasets and EoMT weights downloaded for the previous tasks.
+**B. Evaluation Scripts & Architecture (via GitHub)**
+The code components must be downloaded from the [Course Project GitHub Repository](https://github.com/AlessandroMarinai/MaskArchitectureAnomaly_CourseProject).
+1. Download the `eval/` folder (for Task 7).
+2. Download the `eomt/` folder (for Task 4, 5, 8).
+3. Upload both folders into your Drive alongside the shortcuts.
 
 ### 2. Google Colab Execution (Recommended)
 Since deep learning inference requires significant compute power, most users will opt to run these notebooks on Google Colab. 
 
-To avoid altering the clean relative paths in the code, you can use **symbolic links** to seamlessly map the expected repository folders directly to your Google Drive.
+To avoid altering the clean relative paths in the code, you can use **symbolic links** to seamlessly map the expected repository folders directly to your Google Drive. Colab seamlessly resolves Google Drive shortcuts, meaning this works flawlessly without using your Drive storage quota!
 
-1. Upload the downloaded artifacts to a folder in your Google Drive, structuring them logically:
+1. Ensure your Google Drive folder is structured logically with the shortcuts and uploaded scripts:
    ```text
    MyDrive/FAIMDL_Evaluation/
-   ├── checkpoints/      <-- (Place .bin and .pth weights here)
-   ├── data/             <-- (Place dataset zips/folders here)
-   ├── eval/             <-- (Place erfnet.py, transform.py here)
-   └── eomt/             <-- (Place the eomt/ source code folder here)
+   ├── checkpoints/      <-- (Shortcuts to .bin and .pth weights here)
+   ├── data/             <-- (Shortcuts to dataset zips/folders here)
+   ├── eval/             <-- (Uploaded erfnet.py, transform.py here)
+   └── eomt/             <-- (Uploaded eomt/ source code folder here)
    ```
    *(Note: You can place the `.ipynb` notebooks anywhere you want, or just upload the entire repository folder. Google Colab always executes notebooks in its ephemeral `/content/` directory regardless of where the file is stored).*
 
