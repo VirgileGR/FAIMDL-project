@@ -20,7 +20,5 @@ __pycache__/
 *.ckpt
 *.zip
 datasets/
-data/
-checkpoints/
 *.pth
 *.pth.tar
