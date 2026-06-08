@@ -54,7 +54,7 @@ To successfully reproduce the results, you need specific artifacts for each task
 **A. Datasets (via Google Drive Shortcuts)**
 All datasets are hosted in this [Official Google Drive Folder](https://drive.google.com/drive/folders/1q2vHUzora2nP52fP50zmoQAykWuwoGav).
 1. Open the link.
-2. Instead of downloading, right-click the required datasets (`Anomaly_Validation_Datasets.zip`, `Cityscapes`, etc.) and select **Organize > Add shortcut** (Aggiungi scorciatoia).
+2. Instead of downloading, right-click the required datasets (`Anomaly_Validation_Datasets.zip`, `Cityscapes`, etc.) and select **Organize > Add shortcut**.
 3. Place these shortcuts into a dedicated data folder in your own Drive (e.g., `MyDrive/FAIMDL_Evaluation/data/`).
 
 **B. Evaluation Scripts, Architecture & Weights (via GitHub)**
