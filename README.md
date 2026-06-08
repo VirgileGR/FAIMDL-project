@@ -1,6 +1,16 @@
-# Open-World Anomaly Segmentation for Autonomous Driving
+# Comprehensive Road Scene Understanding for Autonomous Driving
 
-This repository contains the course project material for anomaly segmentation in autonomous driving. The project studies how segmentation models behave when evaluated outside a closed-world setting, with a focus on cross-domain segmentation and anomaly detection.
+**Politecnico di Torino**  
+*Fundamentals of Artificial Intelligence and Machine/Deep Learning (FAIMDL) — Academic Year 2025/2026*
+
+**Authors:**
+- **Virgile Gazeres** (s362611@studenti.polito.it)
+- **Basile Fauconnier** (s361358@studenti.polito.it)
+- **German Federico Ryjluk** (s364139@studenti.polito.it)
+
+---
+
+This repository contains the course project material for comprehensive road scene understanding for autonomous driving. The project studies how segmentation models behave when evaluated outside a closed-world setting, progressing from pixel-based (ERFNet) to mask-based (EoMT) architectures, with a strong focus on cross-domain segmentation and open-world anomaly detection.
 
 ## ⚠️ Evaluation Note for TAs
 
