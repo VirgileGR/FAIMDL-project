@@ -49,19 +49,20 @@ We have engineered this repository to be "Plug & Play". All experimental noteboo
 
 ### 1. Accessing Artifacts (No Download Required for Data)
 
-To successfully reproduce the results, you need specific artifacts for each task. Because datasets and model weights are very heavy, **you do not need to download them locally**. Instead, you can use Google Drive shortcuts.
+To successfully reproduce the results, you need specific artifacts for each task. Because datasets are very heavy, **you do not need to download them locally**. Instead, you can use Google Drive shortcuts.
 
-**A. Datasets and Weights (via Google Drive Shortcuts)**
-All datasets and model weights are hosted in this [Official Google Drive Folder](https://drive.google.com/drive/folders/1q2vHUzora2nP52fP50zmoQAykWuwoGav).
+**A. Datasets (via Google Drive Shortcuts)**
+All datasets are hosted in this [Official Google Drive Folder](https://drive.google.com/drive/folders/1q2vHUzora2nP52fP50zmoQAykWuwoGav).
 1. Open the link.
-2. Instead of downloading, right-click the required datasets (`Anomaly_Validation_Datasets.zip`, `Cityscapes`) and weights (`eomt_cityscapes.bin`, `eomt_coco.bin`, `erfnet_pretrained.pth`) and select **Organize > Add shortcut** (Aggiungi scorciatoia).
-3. Place these shortcuts into a dedicated folder in your own Drive (e.g., `MyDrive/FAIMDL_Evaluation/data/` and `MyDrive/FAIMDL_Evaluation/checkpoints/`).
+2. Instead of downloading, right-click the required datasets (`Anomaly_Validation_Datasets.zip`, `Cityscapes`, etc.) and select **Organize > Add shortcut** (Aggiungi scorciatoia).
+3. Place these shortcuts into a dedicated data folder in your own Drive (e.g., `MyDrive/FAIMDL_Evaluation/data/`).
 
-**B. Evaluation Scripts & Architecture (via GitHub)**
-The code components must be downloaded from the [Course Project GitHub Repository](https://github.com/AlessandroMarinai/MaskArchitectureAnomaly_CourseProject).
+**B. Evaluation Scripts, Architecture & Weights (via GitHub)**
+All code components and model weights must be downloaded from the [Course Project GitHub Repository](https://github.com/AlessandroMarinai/MaskArchitectureAnomaly_CourseProject).
 1. Download the `eval/` folder (for Task 7).
 2. Download the `eomt/` folder (for Task 4, 5, 8).
-3. Upload both folders into your Drive alongside the shortcuts.
+3. Download the necessary weights (`eomt_cityscapes.bin`, `eomt_coco.bin`, `erfnet_pretrained.pth`) from the repository.
+4. Upload everything into your Drive alongside the dataset shortcuts.
 
 ### 2. Google Colab Execution (Recommended)
 Since deep learning inference requires significant compute power, most users will opt to run these notebooks on Google Colab. 
